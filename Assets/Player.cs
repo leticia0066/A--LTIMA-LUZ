@@ -20,6 +20,7 @@ public class PlayerMovimento : MonoBehaviour
     private bool noChao = true;
     private AudioSource audioSource;
     private bool tocandoPassos = false;
+    
 
     //  ADICIONADO (ANIMAÇÃO)
     private Animator animator;
@@ -33,7 +34,7 @@ public class PlayerMovimento : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
 
         //  ADICIONADO (ANIMAÇÃO)
-        animator = GetComponent<Animator>();
+        animator = corpo.GetComponent<Animator>();
     }
 
     void Update()
