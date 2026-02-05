@@ -20,11 +20,15 @@ public class PlayerMovimento : MonoBehaviour
     private bool noChao = true;
     private AudioSource audioSource;
     private bool tocandoPassos = false;
+    private Vector3 escalaCorreta;
 
     // 🔹 ANIMAÇÃO (ADICIONADO)
     private Animator animator;
 
     void Start()
+    {
+        escalaCorreta = corpo.localScale;
+    }
     {
         rb = GetComponent<Rigidbody2D>();
 
@@ -34,6 +38,8 @@ public class PlayerMovimento : MonoBehaviour
 
         // 🔹 pega o Animator (ADICIONADO)
         animator = GetComponentInChildren<Animator>();
+
+        escalaCorreta = corpo.localScale;
     }
 
     void Update()
@@ -48,6 +54,8 @@ public class PlayerMovimento : MonoBehaviour
         // 🔹 animação de andar / idle (ADICIONADO)
         animator.SetFloat("velocidade", Mathf.Abs(horizontal));
         animator.SetBool("noChao", noChao);
+
+        corpo.localScale = new Vector3(Mathf.Sign(corpo.localScale.x) * Mathf.Abs(escalaCorreta.x),escalaCorreta.y,escalaCorreta.z);
     }
 
     void Movimentar(float h)
