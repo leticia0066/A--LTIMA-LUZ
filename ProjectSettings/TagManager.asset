@@ -63,5 +63,8 @@ TagManager:
   - name: Escuro
     uniqueID: 2760409695
     locked: 0
+  - name: Player
+    uniqueID: 3847023149
+    locked: 0
   m_RenderingLayers:
   - Default
