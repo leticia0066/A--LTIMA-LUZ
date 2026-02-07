@@ -2,51 +2,74 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    // 🔹 Singleton (funciona com instance e instancia)
+    public static AudioManager instance;
     public static AudioManager instancia;
 
-    [Header("Musicas")]
-    public AudioClip musicaNormal;
-    public AudioClip musicaBoss;
+    [Header("Fontes de Áudio")]
+    public AudioSource musicaFundo;
+    public AudioSource musicaBoss;
+    public AudioSource sfx;
 
-    private AudioSource audioSource;
+    [Header("Clipes")]
+    public AudioClip musicaNormal;
+    public AudioClip musicaBossClip;
 
     void Awake()
     {
-        if (instancia == null)
-        {
-            instancia = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+
+        instance = this;
+        instancia = this;
+        DontDestroyOnLoad(gameObject);
+
+        // 🔹 garante que as AudioSources existam
+        if (musicaFundo == null)
+            musicaFundo = gameObject.AddComponent<AudioSource>();
+
+        if (musicaBoss == null)
+            musicaBoss = gameObject.AddComponent<AudioSource>();
+
+        if (sfx == null)
+            sfx = gameObject.AddComponent<AudioSource>();
+
+        musicaFundo.loop = true;
+        musicaBoss.loop = true;
     }
 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
         TocarMusicaNormal();
     }
 
+    // 🎵 Música normal
     public void TocarMusicaNormal()
     {
-        if (audioSource.clip == musicaNormal) return;
+        if (musicaNormal == null) return;
 
-        audioSource.clip = musicaNormal;
-        audioSource.loop = true;
-        audioSource.Play();
+        musicaBoss.Stop();
+        musicaFundo.clip = musicaNormal;
+        musicaFundo.Play();
     }
 
+    // 👹 Música do boss
     public void TocarMusicaBoss()
     {
-        if (audioSource.clip != null)
-        {
-            if (audioSource.clip == musicaBoss) return;
-        }
+        if (musicaBossClip == null) return;
 
-        audioSource.clip = musicaBoss;
-        audioSource.loop = true;
-        audioSource.Play();
+        musicaFundo.Stop();
+        musicaBoss.clip = musicaBossClip;
+        musicaBoss.Play();
+    }
+
+    // 🔊 Efeitos sonoros
+    public void TocarSFX(AudioClip clip)
+    {
+        if (clip == null) return;
+        sfx.PlayOneShot(clip);
     }
 }
